@@ -58,16 +58,16 @@ A basic `error` can be created from a `string` by using the `errors.New()` funct
 
 ## The Rust Way
 
-Rust's error-handling story is substantially longer, and has quite a few options
-built into the language. We will cover two `enum` types: `Option` and `Result`;
-the `try!` macro and `?` operator; error combinators; and error best practices.
+Rust's method of error-handling story is more sophisticated, and has quite a 
+few options built into the language. We will cover two `enum` types: `Option` 
+and `Result`. We will also cover the `try!` macro, the `?` operator, error 
+combinators, and error best practices.
 
 #### `Option` and `Result`
 
-Rust's standard library provides two types, `Option<T>` and `Result<T,E>`, that
-are well-suited to error handling.
-
-`Option<T>` and `Result<T,E>` are Rust `enum` types, and are defined like so:
+Rust's standard library provides two types that are well-suited to error 
+handling: `Option<T>` and `Result<T,E>`. These are Rust `enum` types, 
+and are defined like so:
 
 ```rust
 pub enum Option<T> {
@@ -82,14 +82,14 @@ pub enum Result<T, E> {
 }
 ```
 
-An `Option<T>` _might_ contain a value of type `T`; if it does, it's wrapped in
-the `Some` variant, and its value will be `Some(t)`, where the value `t` is of
-type `T`. Otherwise, the value of an `Option<T>` is simply `None`.
+An `Option<T>` _might_ contain a value of type `T`; if it does, its type is 
+wrapped in the `Some` variant. Its value will be `Some(t)`, where the value 
+`t` is of type `T`. Otherwise, the value of an `Option<T>` is simply `None`.
 
 
 A `Result<T,E>` might contain the result of some computation, in this case a
-value of type `T`. If everything was OK, it will be an `Ok(T)`; otherwise, it
-will be an `Err(E)`.
+value of type `T`. If everything in the computation was OK, the `Result` will 
+contain an `Ok(T)`; otherwise, it will contain an `Err(E)`.
 
 
 You may also notice the `#[must_use]` annotation above the
@@ -103,7 +103,7 @@ a `Result`, for example via pattern matching or the `try!` macro
 warning: unused result which must be used, #[warn(unused_must_use)] on by default
 ```
 
-This is not a hard error, but nevertheless is not good to ignore.
+This is not a hard error, but nevertheless it should not be ignored!
 
 #### `try!` and `?`
 
@@ -114,6 +114,8 @@ operator. `try!` and `?` are functionally identical, and both only work on
 
 ```rust
 // TODO make sure this compiles
+// Also maybe add a commented line below the try! line that shows an example of 
+// how to use the ? operator in the same context
 fn bind_socket() -> Result<(), Error> {
     let socket1: TcpStream = try!(TcpStream::connect("127.0.0.1:8000"));
     let socket2: TcpStream = TcpStream::connect("127.0.0.1:8000")?;
@@ -127,14 +129,16 @@ fn bind_socket() -> Result<(), Error> {
 }
 ```
 
+__Adam's comment: what is "the match block above" mentioned in the following paragraph?__
+
 `try!` and `?` are equivalent to each other, and _roughly equivalent_ to the
 match block above; generally `?` looks a bit cleaner, but it doesn't matter
 which one you use. If the `Result` is `Ok(val)`, `try!`/`?` yields the inner
-value; if it is `Err(err)`, `try!`/`?` _returns the `Result` from the function_.
-Note that this is a bit of an oddity-- `try!` and `?` can cause your function to
-_return early_, which may be surprising. However, this makes chaining `Result`
-operations much easier; if you have a number of error conditions to check, you
-can simply write something like this:
+value; if it is `Err(err)`, `try!`/`?` _returns the `Result` from the function 
+that is invoking `try!`/`?`_. Note that this is a bit of an oddity-- `try!` and 
+`?` can cause your function to _return early_, which may be surprising. However, 
+this makes chaining `Result` operations much easier; if you have a number of 
+error conditions to check, you can simply write something like this:
 
 ```rust
 // TODO make sure this compiles
