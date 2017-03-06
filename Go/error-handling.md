@@ -54,7 +54,7 @@ if bytes, err := json.Marshal(`{"Go": "Google", "Rust": "Mozilla"}`); err != nil
 }
 ```
 
-Simple errors can be created from `string`s by using the `errors.New()` function.
+A basic `error` can be created from a `string` by using the `errors.New()` function.
 
 ## The Rust Way
 
