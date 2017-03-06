@@ -19,22 +19,20 @@ type error interface {
 
 The method required by the interface, `Error()`, is designed to provide a
 description of the error that may be used for diagnostics or more specific
-handling of various kinds of errors. For example, when reading data from a
-database, you might use the `Error()` method to return an error with the
-message `"Database Unavailable"` when the database could not be reached, or
-use the `Error()` method to return a `"Could not find data"` error when the
-requested query fails.
+handling of various kinds of errors. For example, when reading data from Redis,
+you might use the `Error()` method to return an error with the message `"Redis
+Unavailable"` when Redis could not be reached, or instead `"Could not find
+data"` when the requested query fails.
 
 ```go
-// TODO rewrite this to make more sense
-func (db *Database) ReadData(query string) (result string, err error) {
+func (r *RedisInstance) Do(query string) (result interface{}, err error) {
    // ...
-   if (!db.connect()) {
-      return ("", errors.New("Database Unavailable"))
+   if !r.connect() {
+      return nil, errors.New("Redis Unavailable")
    }
    // ...
-   if (!db.runQuery(query)) {
-      return ("", errors.New("Could not find data"))
+   if !r.runQuery(query) {
+      return nil, errors.New("Could not find data")
    }
    // ...
 }
