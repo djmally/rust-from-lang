@@ -5,7 +5,7 @@ network connection fails, a database operation goes wrong, etc. At this point,
 your program could simply fall over, crash, and decide that it cannot continue.
 More likely, though, you'll employ some error handling techniques using the
 primitives provided by your language. Here, we will take a look at the
-differences between error handling in Go and Rust.
+differences in error handling between Go and Rust.
 
 ## The Go Way
 
@@ -20,11 +20,11 @@ type error interface {
 
 The method required by the interface, `Error()`, is designed to provide a
 description of the error that may be used for diagnostics or more specific
-handling of various kinds of errors. For example, when reading data from a
-database, you could return an `error` with an `Error()` method that returns
-`"Database Unavailable"` when the database could not be reached, or instead an
-`error` that with an `Error()` method that returns `"Could not find data"` when
-the requested query fails.
+handling of various kinds of errors. For example, when reading data from a 
+database, you might use the `Error()` method to return an error with the 
+message `"Database Unavailable"` when the database could not be reached, or 
+use the `Error()` method to return a `"Could not find data"` error when the 
+requested query fails.
 
 ```go
 // TODO rewrite this to make more sense
